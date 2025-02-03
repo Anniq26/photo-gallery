@@ -1,0 +1,54 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.pgwrapper{
+    display: flex;
+    flex-direction: column;
+    max-width: 1920px;
+    max-height: auto;
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    padding: 50px;
+    gap: 50px;
+}
+.title{
+    text-align: center;
+    line-height: 10px;
+}
+
+.txtwrp{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: auto;
+    justify-content: flex-start;
+    gap: 5px;
+}
+.txt{
+    line-height: 15px;
+    color: #000000;
+    cursor: pointer;
+}
+.txt:hover{ color: blue;}
+
+.imageswrp{
+    display: flex;
+    width: 100%;
+    height: auto;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding-top: 20px;
+}
+
+.imagestyle{
+    max-width: 200px;
+    width: 100%;
+    height: auto;
+    margin: 10; 
+    border-radius: 8px;
+}

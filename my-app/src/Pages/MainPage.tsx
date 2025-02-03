@@ -18,8 +18,19 @@ const MainPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedLikes, setSelectedLikes] = useState<number | null>(null)
   const [selectedDownloads, setSelectedDownloads] = useState<number | null>(null)
+  const [photos, setPhotos] = useState<Iphoto[]>([])
+  const [page, setPage] = useState(1)
+  
 
 
+  useEffect (() => {
+    const handleScroll = () => {
+      if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.
+        documentElement.scrollHeight) {
+          setPage(prev => prev + 1)
+        }
+    }
+  }, [page])
   
   useEffect(() => {
     const storedHistory = localStorage.getItem('searchHistory');
@@ -29,28 +40,26 @@ const MainPage: React.FC = () => {
   }, []);
 
   const saveSearchHistory = (newSearch: string) => {
-    if (!newSearch.trim()) return; 
-  
+    if (!newSearch) return; 
     const filteredImages = res.filter((photo: Iphoto) =>
       photo.alt_description?.toLowerCase().includes(newSearch.toLowerCase())
     );
-  
     if (filteredImages.length === 0) return; 
-  
     const newEntry = { term: newSearch, images: filteredImages };
-
     const updatedHistory = [
       ...searchHistory.filter(item => item.term !== newSearch),
       newEntry
     ];
-  
     setSearchHistory(updatedHistory); 
     localStorage.setItem('searchHistory', JSON.stringify(updatedHistory)); 
   };
 
-  const filteredPhotos = res.filter((photo: Iphoto) =>
-    photo.alt_description?.toLowerCase().includes(searchValue.toLowerCase())
-  );
+
+  useEffect(() => {
+    if(res.length > 0) {
+      setPhotos(prev => [...prev, ...res])
+    }
+  }, [res])
 
   if (loading) {
     return <div>Loading...</div>;
@@ -79,7 +88,7 @@ const MainPage: React.FC = () => {
     <div>
       <SearchBar onSearch={setSearchValue} onSubmitSearch={saveSearchHistory} />
       <div className={styles.wrapper}>
-        {filteredPhotos.map((photo: Iphoto) => (
+        {photos.map((photo: Iphoto) => (
           <div key={photo.id} className={styles.photowrp} onClick={() => openModal(photo.urls.regular, photo.alt_description, photo.downloads, photo.likes)}>
             <img src={photo.urls.regular} alt={photo.alt_description}  className={styles.imgstyle} />
           </div>

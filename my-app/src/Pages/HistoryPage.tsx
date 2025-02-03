@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import styles from '../historypg.module.css';
 
 interface Image {
   id: string;
@@ -14,6 +15,18 @@ interface SearchHistoryItem {
 const HistoryPage: React.FC = () => {
   const [history, setHistory] = useState<SearchHistoryItem[]>([]);
   const [selectedImages, setSelectedImages] = useState<Image[]>([]);
+  const [page, setPage] = useState(1)
+  
+
+
+  useEffect (() => {
+    const handleScroll = () => {
+      if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.
+        documentElement.scrollHeight) {
+          setPage(prev => prev + 1)
+        }
+    }
+  }, [page])
 
   useEffect(() => {
     const storedHistory = localStorage.getItem('searchHistory');
@@ -27,14 +40,14 @@ const HistoryPage: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Search History</h2>
-      <div>
+    <div className={styles.pgwrapper}>
+      <h2 className={styles.title}>Search History</h2>
+      <div className={styles.txtwrp}>
         {history.map((item, index) => (
           <div 
             key={index} 
             onClick={() => setSelectedImages(item.images)}
-            style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline', marginBottom: 5 }}
+            className={styles.txt}
           >
             {item.term}
           </div>
@@ -44,13 +57,13 @@ const HistoryPage: React.FC = () => {
       {selectedImages.length > 0 && (
         <div>
           <h3>Images for selected search</h3>
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          <div className={styles.imageswrp}>
             {selectedImages.map((photo) => (
               <img 
                 key={photo.id} 
                 src={photo.urls.regular} 
                 alt={photo.alt_description} 
-                style={{ width: 200, margin: 10, borderRadius: 8 }}
+                className={styles.imagestyle}
               />
             ))}
           </div>
